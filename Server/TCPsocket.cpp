@@ -50,7 +50,6 @@ void TCPsocket::check_friend(){
     }
     emit string_to_socket_ready(res,1);
 
-
     sql_query.exec(QString("select * from friends where user_name2='%1' and accepted=0").arg(user_name));
     QString add_friend="friendreq****";
     first=1;
@@ -395,6 +394,13 @@ void TCPsocket::handle_string() //工作原理与read_from_socket相同
             sql_query.exec(QString("update friends set accepted=2 where user_name1='%1' and user_name2='%2'").arg(user_name1).arg(user_name));
             sql_query.exec(QString("insert into friends values('%1','%2',1)").arg(user_name).arg(user_name1));
             qDebug()<<"accepted!";
+        }       
+    }else if(mode=="friendrej"){
+        QString user_name1=list.at(1);
+        sql_query.exec(QString("select * from friends where user_name1='%1' and user_name2='%2' and accepted=0").arg(user_name1).arg(user_name));
+        if(sql_query.next()){
+            sql_query.exec(QString("delete from friends where user_name1='%1' and user_name2='%2'").arg(user_name1).arg(user_name));
+            qDebug()<<"rejected!";
         }
     }else if(mode=="chatmsg"){
         qDebug()<<"received chatmsg request!";

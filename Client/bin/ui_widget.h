@@ -449,7 +449,7 @@ public:
 
         retranslateUi(Widget);
 
-        stackedWidget->setCurrentIndex(4);
+        stackedWidget->setCurrentIndex(0);
         tabWidget->setCurrentIndex(0);
 
 

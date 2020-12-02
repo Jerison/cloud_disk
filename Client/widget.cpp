@@ -8,7 +8,7 @@ Widget::Widget(QWidget *parent)
     ui->FriendsList->setRowCount(1);
     set_hidden(1);
     for(int i = 0; i< 1;i++){
-    //ui->FriendsList->setItem(i,0,new QTableWidgetItem("jerison"));
+        //ui->FriendsList->setItem(i,0,new QTableWidgetItem("jerison"));
     }
 
     socket = new QTcpSocket(this);
@@ -219,22 +219,20 @@ void Widget::read_from_socket() {
             for(int i=0; i<msg_all.size(); i++) {
                 auto args=msg_all[i].split("$$");//每条信息是 来自用户 信息内容 的二元组
                 if(cur_w && cur_w->getCurUser() == args[0]){
-
+                    cur_w->showMsg(args[1]);
                 }
-                else{
-                    qDebug()<<"entered loop!";
-                    for(int j = 0; j < ui->FriendsList->rowCount(); j++){
-                        qDebug()<<"j="<<j;
-                        QString s = ui->FriendsList->item(j,0)->text();
-                        if(args[0] == ui->FriendsList->item(j,0)->text()){
-                            qDebug()<<"p1";
-                            QString res = "";
-                            if(ui->FriendsList->item(j,1))
-                                res = ui->FriendsList->item(j,1)->text();
-                            res += "##";
-                            res += args[1];
-                            ui->FriendsList->setItem(j,1,new QTableWidgetItem(res));
-                        }
+                qDebug()<<"entered loop!";
+                for(int j = 0; j < ui->FriendsList->rowCount(); j++){
+                    qDebug()<<"j="<<j;
+                    QString s = ui->FriendsList->item(j,0)->text();
+                    if(args[0] == ui->FriendsList->item(j,0)->text()){
+                        qDebug()<<"p1";
+                        QString res = "";
+                        if(ui->FriendsList->item(j,1))
+                            res = ui->FriendsList->item(j,1)->text();
+                        res += "##";
+                        res += args[1];
+                        ui->FriendsList->setItem(j,1,new QTableWidgetItem(res));
                     }
                 }
             }
@@ -259,7 +257,7 @@ void Widget::read_from_socket() {
                 }
             }
         }
-    check_byte(as); //检测字节流中是否存在下载的文件字节
+        check_byte(as); //检测字节流中是否存在下载的文件字节
     }
 }
 void Widget::seek_next_up_cur() {   //寻找传输状态的下一个文件下标
@@ -505,7 +503,7 @@ void Widget::on_share_clicked() {
     QString file_name=ui->files->item(choice,0)->text();
     bool ok;
     QString user_name = QInputDialog::getText(this,"输入用户名",tr("请输入要分享用户的用户名：")
-                        , QLineEdit::Normal,"", &ok);
+                                              , QLineEdit::Normal,"", &ok);
     if (ok && !user_name.isEmpty()) {
         QMessageBox::information(this,"提示",QString("已尝试将文件%1分享给用户%2").arg(file_name).arg(user_name));
         QString res=QString("share****%1##%2").arg(user_name).arg(file_name);   //发送分享请求
@@ -581,7 +579,7 @@ void Widget::on_StartChat_clicked()
 void Widget::on_AddFriends_clicked(){
     bool ok;
     QString user_name = QInputDialog::getText(this,"输入用户名",tr("请输入对方用户名：")
-                        , QLineEdit::Normal,"", &ok);
+                                              , QLineEdit::Normal,"", &ok);
     if (ok && !user_name.isEmpty()) {
         QMessageBox::information(this,"提示",QString("已向%1发送好友申请").arg(user_name));
         QString res = QString("friend****%1").arg(user_name);   //发送好友申请
@@ -606,7 +604,7 @@ void Widget::on_PassReq_clicked(){
     }
     QString user_name=ui->ReqList->item(choice,0)->text();
     QMessageBox::information(this,"提示",QString("已通过%1的好友申请。").arg(user_name));
-    QString res=QString("friendack****%1").arg(user_name);   //发送分享请求
+    QString res=QString("friendack****%1").arg(user_name);   //发送接收请求
     send_to_socket(res);
     ui->ReqList->removeRow(choice);
     res = "friendlist****";
@@ -623,6 +621,8 @@ void Widget::on_RejReq_clicked(){
     QString user_name=ui->ReqList->item(choice,0)->text();
     QMessageBox::information(this,"提示",QString("已拒绝%1的好友申请。").arg(user_name));
     ui->ReqList->removeRow(choice);
+    QString res=QString("friendrej****%1").arg(user_name);   //发送拒绝请求
+    send_to_socket(res);
 }
 
 void Widget::send_msg(QString msg)
