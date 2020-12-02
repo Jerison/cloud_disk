@@ -15,9 +15,13 @@ Widget::Widget(QWidget *parent)
         QMessageBox::information(this, "提示", "无法连接到服务器!");
         exit(0);
     }
+
+    cur_w = new MainWindow();
+
     connect(socket, &QTcpSocket::readyRead, this, &Widget::read_from_socket);
     connect(ui->button_login, &QPushButton::clicked, this, &Widget::try_login);
     connect(ui->button_register, &QPushButton::clicked, this, &Widget::try_register);
+    connect(cur_w, &MainWindow::open_chat,this,&Widget::share_in_session);
     //将定时器与更新传输状态相连
     status_timer.setInterval(1000);
     connect(&status_timer,&QTimer::timeout,this,&Widget::fresh_status);
@@ -33,6 +37,7 @@ Widget::Widget(QWidget *parent)
     ui->transport->setColumnWidth(2,0.3*width);
 
 }
+
 void Widget::fresh_status() {
     ui->transport->setRowCount(status.size());//设置行数
     for(int i=0; i<status.size(); i++) {        //三栏分别为文件名 文件大小 上传下载进度
@@ -158,9 +163,40 @@ void Widget::read_from_socket() {
                 ui->files->setItem(i,1,new QTableWidgetItem(size_));
                 ui->files->setItem(i,2,new QTableWidgetItem(args[2]));
             }
+
+            ui->files_2->setRowCount(files.size());
+            file_size.resize(files.size());
+            for(int i=0; i<files.size(); i++) {
+                auto args=files[i].split("$$");//每个文件是文件名 文件大小 上传时间的三元组
+                file_size[i]=args[1].toInt();
+                int size=file_size[i]/1024;
+                if(size==0)size=1;
+                QString size_=QString("%1KB").arg(size);
+                ui->files_2->setItem(i,0,new QTableWidgetItem(args[0]));
+                ui->files_2->setItem(i,1,new QTableWidgetItem(size_));
+                ui->files_2->setItem(i,2,new QTableWidgetItem(args[2]));
+            }
         }
-    }
+        else if(mode == "friend"){
+            auto args=list.at(1).split("##");
+            ui->FriendsList->setRowCount(args.size());
+            for(int i = 0; i< args.size();i++){
+                ui->FriendsList->setItem(i,0,new QTableWidgetItem(args[i]));
+            }
+        }
+        else if(mode == "chat"){
+            auto msgs = list.at(1).split("##");
+            for(int i = 0;i < msgs.size(); i++ ){
+                auto args = msgs[i].split("$$");//每条信息的格式:来源$$消息
+                for(int j = 0; j < ui->FriendsList->rowCount(); j++){
+                    if(args[0] == ui->FriendsList->item(j,0)->text())
+                        ui->FriendsList->setItem(j,1, new QTableWidgetItem(args[1]));
+                }
+
+            }
+        }
     check_byte(as); //检测字节流中是否存在下载的文件字节
+    }
 }
 void Widget::seek_next_up_cur() {   //寻找传输状态的下一个文件下标
     for(int i=status_up_cur+1; i<status.size(); i++) {
@@ -256,6 +292,11 @@ void Widget::upload_bytes(QByteArray &a) {//储存打包的字节流
 }
 
 Widget::~Widget() {
+    //关闭窗口时若用户处在登录状态，将用户登出
+    if(ui->stackedWidget->currentIndex()){
+        qDebug()<<"logged out";
+        on_Button_logout_clicked();
+    }
     delete ui;
 }
 
@@ -271,7 +312,7 @@ void Widget::on_pushButton_5_clicked() {
 void Widget::on_Button_logout_clicked() {
     ui->stackedWidget->setCurrentIndex(0);
     QString res="logout****";
-    send_to_socket( res);
+    send_to_socket(res);
 }
 
 void Widget::on_upload_clicked() {
@@ -406,4 +447,46 @@ void Widget::on_share_clicked() {
     }
     QString res=QString("share****%1##%2").arg(user_name).arg(file_name);   //发送分享请求
     send_to_socket(res);
+}
+
+void Widget::on_shareCancel_clicked(){
+    ui->stackedWidget->setCurrentIndex(1);
+}
+
+void Widget::on_shareConfirm_clicked(){
+    int choice=ui->files_2->currentRow();
+    if(choice==-1) {
+        QMessageBox::information(this,"提示","请选择要分享的文件。");
+        return;
+    }
+    QString file_name=ui->files->item(choice,0)->text();
+    QMessageBox::information(this,"提示",QString("已尝试将文件%1分享给用户%2").arg(file_name).arg(Cur_Target));
+    QString res=QString("share****%1##%2").arg(Cur_Target).arg(file_name);   //发送分享请求
+    send_to_socket(res);
+    ui->stackedWidget->setCurrentIndex(1);
+}
+
+void Widget::share_in_session(QString user_name){
+    qDebug()<<"in!";
+    ui->stackedWidget->setCurrentIndex(3);
+    Cur_Target = user_name;
+    QMessageBox::information(this,"提示","请选择要分享的文件。");
+}
+
+void Widget::on_session_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(4);
+}
+
+void Widget::show_cur_w()
+{
+    cur_w->show();
+}
+
+void Widget::on_StartChat_clicked()
+{
+    MainWindow chat;
+    QString res = "friend****";
+    send_to_socket(res);
+    show_cur_w();
 }

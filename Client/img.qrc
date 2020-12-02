@@ -1,2 +1,9 @@
-<!DOCTYPE RCC>
-<RCC version="1.0"/>
+<RCC>
+    <qresource prefix="/">
+        <file>img/CustomerCopy.png</file>
+        <file>img/CustomerService.png</file>
+        <file>img/loading4.gif</file>
+        <file>img/CustomerCopy.jpg</file>
+        <file>img/CustomerService.jpg</file>
+    </qresource>
+</RCC>

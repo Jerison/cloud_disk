@@ -1,6 +1,5 @@
 #ifndef WIDGET_H
 #define WIDGET_H
-
 #include <QWidget>
 
 #include <QtNetwork/QtNetwork>
@@ -11,6 +10,7 @@
 #include <QDateTime>
 #include <QTimer>
 #include <QInputDialog>
+#include "chat_mainwindow.h"
 QT_BEGIN_NAMESPACE
 namespace Ui { class Widget; }
 QT_END_NAMESPACE
@@ -47,6 +47,7 @@ class Widget : public QWidget
 public:
     Widget(QWidget *parent = nullptr);
     ~Widget();
+    void share_in_session(QString user_name);
 
 public slots:
     void read_from_socket();//从socket读信息并处理
@@ -58,6 +59,10 @@ private slots:
     void on_download_clicked();     //点击下载槽函数
     void on_fresh_clicked();        //点击刷新槽函数 暂时隐藏
     void on_share_clicked();        //点击刷新槽函数
+    void on_session_clicked();      //点击开启会话
+    void on_shareCancel_clicked(); //取消分享
+    void on_shareConfirm_clicked();//确认分享
+    void on_StartChat_clicked(); //开启会话
 
 private:
     Ui::Widget *ui;
@@ -83,5 +88,8 @@ private:
     void upload_bytes(QByteArray &a);   //将收到字节流中的文件暂存到file的bs中
     void fresh_status();
     void seek_next_up_cur();    //处理重复文件的问题
+    void show_cur_w();
+    QString Cur_Target;
+    MainWindow* cur_w;
 };
-#endif // WIDGET_H
+#endif
