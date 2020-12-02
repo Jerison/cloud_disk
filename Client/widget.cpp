@@ -6,10 +6,10 @@ Widget::Widget(QWidget *parent)
     , ui(new Ui::Widget) {
     ui->setupUi(this);
     ui->FriendsList->setRowCount(1);
+    set_hidden(1);
     for(int i = 0; i< 1;i++){
     //ui->FriendsList->setItem(i,0,new QTableWidgetItem("jerison"));
     }
-
 
     socket = new QTcpSocket(this);
     socket->connectToHost(QHostAddress::LocalHost, 8888);  //  QHostAddress::LocalHost "62.234.142.180"
@@ -21,12 +21,12 @@ Widget::Widget(QWidget *parent)
         exit(0);
     }
 
-    cur_w = new MainWindow();
-
+    cur_w = NULL;
+    connect(ui->tabWidget, &QTabWidget::currentChanged, this, &Widget::set_hidden);
     connect(socket, &QTcpSocket::readyRead, this, &Widget::read_from_socket);
     connect(ui->button_login, &QPushButton::clicked, this, &Widget::try_login);
     connect(ui->button_register, &QPushButton::clicked, this, &Widget::try_register);
-    connect(cur_w, &MainWindow::open_chat,this,&Widget::share_in_session);
+    //connect(cur_w, &MainWindow::open_chat,this,&Widget::share_in_session);
     //将定时器与更新传输状态相连
     status_timer.setInterval(1000);
     connect(&status_timer,&QTimer::timeout,this,&Widget::fresh_status);
@@ -40,6 +40,8 @@ Widget::Widget(QWidget *parent)
     ui->transport->setColumnWidth(0,0.45*width);
     ui->transport->setColumnWidth(1,0.2*width);
     ui->transport->setColumnWidth(2,0.3*width);
+
+    waiting_req = 0;
 
 }
 
@@ -200,8 +202,62 @@ void Widget::read_from_socket() {
 
             }
         }
+        else if(mode == "friendreq"){
+            qDebug()<<"request found!";
+            auto args = list.at(1).split("##");
+            ui->ReqList->setRowCount(args.size());
+            for(int i = 0; i< args.size();i++){
+                ui->ReqList->setItem(i,0,new QTableWidgetItem(args[i]));
+            }
+        }
         else if(mode == "sentmsg"){
 
+        }
+        else if(mode == "onlinemsg"){
+            qDebug()<<"received online msg";
+            auto msg_all=list.at(1).split("##");  //各信息以##隔开
+            for(int i=0; i<msg_all.size(); i++) {
+                auto args=msg_all[i].split("$$");//每条信息是 来自用户 信息内容 的二元组
+                if(cur_w && cur_w->getCurUser() == args[0]){
+
+                }
+                else{
+                    qDebug()<<"entered loop!";
+                    for(int j = 0; j < ui->FriendsList->rowCount(); j++){
+                        qDebug()<<"j="<<j;
+                        QString s = ui->FriendsList->item(j,0)->text();
+                        if(args[0] == ui->FriendsList->item(j,0)->text()){
+                            qDebug()<<"p1";
+                            QString res = "";
+                            if(ui->FriendsList->item(j,1))
+                                res = ui->FriendsList->item(j,1)->text();
+                            res += "##";
+                            res += args[1];
+                            ui->FriendsList->setItem(j,1,new QTableWidgetItem(res));
+                        }
+                    }
+                }
+            }
+        }
+        else if(mode == "offlinemsg"){
+            auto msg_all=list.at(1).split("##");  //各信息以##隔开
+            for(int i=0; i<msg_all.size(); i++) {
+                auto args=msg_all[i].split("$$");//每条信息是 来自用户 信息内容 的二元组
+                qDebug()<<"entered loop!";
+                for(int j = 0; j < ui->FriendsList->rowCount(); j++){
+                    qDebug()<<"j="<<j;
+                    QString s = ui->FriendsList->item(j,0)->text();
+                    if(args[0] == ui->FriendsList->item(j,0)->text()){
+                        qDebug()<<"p1";
+                        QString res = "";
+                        if(ui->FriendsList->item(j,1))
+                            res = ui->FriendsList->item(j,1)->text();
+                        res += "##";
+                        res += args[1];
+                        ui->FriendsList->setItem(j,1,new QTableWidgetItem(res));
+                    }
+                }
+            }
         }
     check_byte(as); //检测字节流中是否存在下载的文件字节
     }
@@ -488,6 +544,10 @@ void Widget::share_in_session(QString user_name){
 void Widget::on_session_clicked()
 {
     ui->stackedWidget->setCurrentIndex(4);
+    QString res = "friendlist****";
+    send_to_socket(res);
+    res = "chatmsg****";
+    send_to_socket(res);
 }
 
 void Widget::show_cur_w()
@@ -497,12 +557,25 @@ void Widget::show_cur_w()
 
 void Widget::on_StartChat_clicked()
 {
-    MainWindow chat;
-    QString res = "friendlist****";
-    send_to_socket(res);
-    res = "chatmsg****";
-    send_to_socket(res);
+    int choice=ui->FriendsList->currentRow();
+    if(choice==-1) {
+        QMessageBox::information(this,"提示","请选择好友！");
+        return;
+    }
+    QString user_name=ui->FriendsList->item(choice,0)->text();
+    cur_w = new MainWindow(user_name);
     show_cur_w();
+    connect(cur_w, &MainWindow::open_chat, this, &Widget::share_in_session);
+    connect(cur_w, &MainWindow::send_msg, this, &Widget::send_msg);
+    connect(cur_w, &MainWindow::close_cur_w, this, &Widget::close_cur_w);
+    QString init_msg = "";
+    if(ui->FriendsList->item(choice,1)){
+        init_msg += ui->FriendsList->item(choice,1)->text();
+        auto msg_unread = init_msg.split("##");
+        for(int i = 0; i < msg_unread.size(); i++){
+            cur_w->showMsg(msg_unread[i]);
+        }
+    }
 }
 
 void Widget::on_AddFriends_clicked(){
@@ -511,7 +584,8 @@ void Widget::on_AddFriends_clicked(){
                         , QLineEdit::Normal,"", &ok);
     if (ok && !user_name.isEmpty()) {
         QMessageBox::information(this,"提示",QString("已向%1发送好友申请").arg(user_name));
-        QString res=QString("friend****%1").arg(user_name);   //发送好友申请
+        QString res = QString("friend****%1").arg(user_name);   //发送好友申请
+        qDebug()<<QString("requested %1").arg(user_name);
         send_to_socket(res);
     }
     else if(ok && user_name.isEmpty()){
@@ -522,4 +596,60 @@ void Widget::on_AddFriends_clicked(){
 
 void Widget::on_GoBack_clicked(){
     ui->stackedWidget->setCurrentIndex(1);
+}
+
+void Widget::on_PassReq_clicked(){
+    int choice=ui->ReqList->currentRow();
+    if(choice==-1) {
+        QMessageBox::information(this,"提示","请选择需要通过的请求。");
+        return;
+    }
+    QString user_name=ui->ReqList->item(choice,0)->text();
+    QMessageBox::information(this,"提示",QString("已通过%1的好友申请。").arg(user_name));
+    QString res=QString("friendack****%1").arg(user_name);   //发送分享请求
+    send_to_socket(res);
+    ui->ReqList->removeRow(choice);
+    res = "friendlist****";
+    send_to_socket(res);
+}
+
+void Widget::on_RejReq_clicked(){
+    int choice=ui->ReqList->currentRow();
+    if(choice==-1) {
+        QMessageBox::information(this,"提示","请选择需要通过的请求。");
+        return;
+    }
+
+    QString user_name=ui->ReqList->item(choice,0)->text();
+    QMessageBox::information(this,"提示",QString("已拒绝%1的好友申请。").arg(user_name));
+    ui->ReqList->removeRow(choice);
+}
+
+void Widget::send_msg(QString msg)
+{
+    QString res = QString("send****%1$$%2").arg(cur_w->getCurUser()).arg(msg);
+    qDebug()<<"sent msg: "<<res;
+    send_to_socket(res);
+}
+
+void Widget::close_cur_w(){
+    delete cur_w;
+    cur_w = NULL;
+    qDebug()<<"window closed!";
+}
+
+void Widget::set_hidden(int index)
+{
+    if(ui->tabWidget->currentIndex()){
+        ui->AddFriends->hide();
+        ui->StartChat->hide();
+        ui->PassReq->show();
+        ui->RejReq->show();
+    }
+    else{
+        ui->AddFriends->show();
+        ui->StartChat->show();
+        ui->PassReq->hide();
+        ui->RejReq->hide();
+    }
 }

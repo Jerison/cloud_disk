@@ -3,28 +3,33 @@
 #include <QDateTime>
 #include <QDebug>
 
-MainWindow::MainWindow(QWidget *parent) :
+MainWindow::MainWindow(QString user_name, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    setWindowTitle("NEW CHAT");
+    setWindowTitle(user_name);
+    cur_user = user_name;
     resize(600, 800);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+    emit close_cur_w();
 }
 
 void MainWindow::on_pushButton_clicked()    //点击发送键
 {
     QString msg = ui->textEdit->toPlainText();
+    if (msg == "")
+        return;
+    emit send_msg(msg);
+
     ui->textEdit->setText("");
     QString time = QString::number(QDateTime::currentDateTime().toTime_t()); //时间戳
 
     bool isSending = true; // 发送中
-
     qDebug()<<"addMessage" << msg << time << ui->listWidget->count();
     //if(ui->listWidget->count()%2) {
     if(1) {
@@ -34,6 +39,7 @@ void MainWindow::on_pushButton_clicked()    //点击发送键
             QNChatMessage* messageW = new QNChatMessage(ui->listWidget->parentWidget());
             QListWidgetItem* item = new QListWidgetItem(ui->listWidget);
             dealMessage(messageW, item, msg, time, QNChatMessage::User_Me);
+
         } else {
             bool isOver = true;
             for(int i = ui->listWidget->count() - 1; i > 0; i--) {
@@ -67,7 +73,7 @@ void MainWindow::on_pushButton_clicked()    //点击发送键
 void MainWindow::on_pushButton_2_clicked()  //点击共享文件
 {
     qDebug()<<"CLICKED!";
-    emit open_chat("jerison");
+    emit open_chat(cur_user);
     //main_w->share_in_session("jerison");
 }
 
@@ -133,3 +139,15 @@ QString MainWindow::getCurUser(){
     return cur_user;
 }
 
+void MainWindow::showMsg(QString msg){
+    if (msg == "")
+        return;
+
+    QString time = QString::number(QDateTime::currentDateTime().toTime_t()); //时间戳
+    dealMessageTime(time);
+
+    QNChatMessage* messageW = new QNChatMessage(ui->listWidget->parentWidget());
+    QListWidgetItem* item = new QListWidgetItem(ui->listWidget);
+    dealMessage(messageW, item, msg, time, QNChatMessage::User_She);
+    ui->listWidget->setCurrentRow(ui->listWidget->count()-1);
+}

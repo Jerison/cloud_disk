@@ -367,6 +367,9 @@
        </item>
        <item>
         <widget class="QTableWidget" name="files">
+         <property name="editTriggers">
+          <set>QAbstractItemView::NoEditTriggers</set>
+         </property>
          <attribute name="horizontalHeaderMinimumSectionSize">
           <number>28</number>
          </attribute>
@@ -435,6 +438,9 @@
        </item>
        <item>
         <widget class="QTableWidget" name="transport">
+         <property name="editTriggers">
+          <set>QAbstractItemView::NoEditTriggers</set>
+         </property>
          <attribute name="horizontalHeaderCascadingSectionResizes">
           <bool>false</bool>
          </attribute>
@@ -469,6 +475,9 @@
          <width>751</width>
          <height>511</height>
         </rect>
+       </property>
+       <property name="editTriggers">
+        <set>QAbstractItemView::NoEditTriggers</set>
        </property>
        <attribute name="horizontalHeaderMinimumSectionSize">
         <number>28</number>
@@ -574,9 +583,9 @@
       <widget class="QPushButton" name="PassReq">
        <property name="geometry">
         <rect>
-         <x>620</x>
-         <y>370</y>
-         <width>121</width>
+         <x>640</x>
+         <y>170</y>
+         <width>81</width>
          <height>51</height>
         </rect>
        </property>
@@ -587,7 +596,7 @@
         </font>
        </property>
        <property name="text">
-        <string>通过申请</string>
+        <string>Y</string>
        </property>
       </widget>
       <widget class="QTabWidget" name="tabWidget">
@@ -619,6 +628,9 @@ QTabBar::tab{height:30}</string>
            <height>541</height>
           </rect>
          </property>
+         <property name="editTriggers">
+          <set>QAbstractItemView::NoEditTriggers</set>
+         </property>
          <property name="columnCount">
           <number>2</number>
          </property>
@@ -647,10 +659,10 @@ QTabBar::tab{height:30}</string>
         <widget class="QTableWidget" name="ReqList">
          <property name="geometry">
           <rect>
-           <x>-10</x>
-           <y>-9</y>
+           <x>0</x>
+           <y>-30</y>
            <width>541</width>
-           <height>541</height>
+           <height>561</height>
           </rect>
          </property>
          <property name="font">
@@ -658,6 +670,9 @@ QTabBar::tab{height:30}</string>
            <family>等线</family>
            <pointsize>12</pointsize>
           </font>
+         </property>
+         <property name="editTriggers">
+          <set>QAbstractItemView::NoEditTriggers</set>
          </property>
          <property name="columnCount">
           <number>1</number>
@@ -685,7 +700,7 @@ QTabBar::tab{height:30}</string>
        <property name="geometry">
         <rect>
          <x>610</x>
-         <y>60</y>
+         <y>470</y>
          <width>141</width>
          <height>51</height>
         </rect>
@@ -704,6 +719,25 @@ QTabBar::tab{height:30}</string>
        </property>
        <property name="text">
         <string/>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="RejReq">
+       <property name="geometry">
+        <rect>
+         <x>640</x>
+         <y>270</y>
+         <width>81</width>
+         <height>51</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <family>黑体</family>
+         <pointsize>14</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>N</string>
        </property>
       </widget>
      </widget>

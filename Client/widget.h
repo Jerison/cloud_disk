@@ -51,6 +51,7 @@ public:
 
 public slots:
     void read_from_socket();//从socket读信息并处理
+    void set_hidden(int index);
 private slots:
     void on_pushButton_6_clicked(); //切换至目录页
     void on_pushButton_5_clicked(); //切换至传输信息页
@@ -65,6 +66,8 @@ private slots:
     void on_StartChat_clicked(); //开启会话
     void on_AddFriends_clicked();//点击添加好友
     void on_GoBack_clicked();    //点击返回
+    void on_PassReq_clicked();   //点击通过好友请求
+    void on_RejReq_clicked();   //点击拒绝好友请求
 
 private:
     Ui::Widget *ui;
@@ -91,7 +94,10 @@ private:
     void fresh_status();
     void seek_next_up_cur();    //处理重复文件的问题
     void show_cur_w();
+    void send_msg(QString msg);
+    void close_cur_w();
     QString Cur_Target;
     MainWindow* cur_w;
+    int waiting_req;
 };
 #endif

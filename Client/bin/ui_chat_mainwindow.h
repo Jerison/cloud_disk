@@ -82,10 +82,10 @@ public:
         textEdit->setFont(font);
         pushButton = new QPushButton(widget);
         pushButton->setObjectName(QStringLiteral("pushButton"));
-        pushButton->setGeometry(QRect(440, 120, 81, 23));
+        pushButton->setGeometry(QRect(440, 112, 91, 31));
         pushButton_2 = new QPushButton(widget);
         pushButton_2->setObjectName(QStringLiteral("pushButton_2"));
-        pushButton_2->setGeometry(QRect(350, 120, 81, 23));
+        pushButton_2->setGeometry(QRect(340, 112, 91, 31));
 
         gridLayout->addWidget(widget, 1, 0, 1, 2);
 
