@@ -24,7 +24,6 @@ TCPsocket::TCPsocket(QObject *parent)
 TCPsocket::~TCPsocket()
 {
 }
-
 void TCPsocket::socket_init(const qintptr socketDescriptor)
 {
     files.resize(100);
@@ -35,9 +34,38 @@ void TCPsocket::socket_init(const qintptr socketDescriptor)
     socketdescriptor = socketDescriptor;
     connect(socket, &QTcpSocket::disconnected, this, &TCPsocket::tell_server_disconnected);
     connect(socket, &QTcpSocket::disconnected,  this,&TCPsocket::user_disconnect);
-    srand((unsigned int)time(NULL));
+    timer_friend=new QTimer();
+    timer_friend->setInterval(2000);
+    connect(timer_friend,&QTimer::timeout,this,&TCPsocket::check_friend);
 }
-
+void TCPsocket::check_friend(){
+    sql_query.exec(QString("select * from frineds where user_name2='%1' and accepted=0").arg(user_name));
+    QString add_friend="friendreq****";
+    int first=1;
+    while(sql_query.next()){
+        if(first)first=0;
+        else add_friend+="##";
+        add_friend+=sql_query.value(0).toString();
+    }
+    if(first==0)
+    emit string_to_socket_ready(add_friend,1);
+    sql_query.exec(QString("select * from frineds where user_name1='%1' and accepted=2").arg(user_name));
+    while(sql_query.next()){
+        QString user_name2=sql_query.value(1).toString();
+        QString res="friendack****"+user_name2;
+        emit string_to_socket_ready(res,1);
+        sql_query2.exec(QString("update set accepted=1 where user_name1='%1' and user_name2='%2'").arg(user_name).arg(user_name2));
+    }
+    sql_query.exec(QString("select * from messages where user_name2='%1' and sent=0").arg(user_name));
+    while(sql_query.next()){
+        QString user_name1=sql_query.value(0).toString();
+        QString res="onlinemsg****"+user_name1+"$$"+sql_query.value(3).toString();
+        QString time=sql_query.value(4).toString();
+        emit string_to_socket_ready(res,1);
+        sql_query2.exec(QString("update set sent=1 where user_name1='%1' and user_name2 ='%2' and time='%3'")
+                        .arg(user_name1).arg(user_name).arg(time));
+    }
+}
 void TCPsocket::tell_server_disconnected()
 {
 	QString res = QString("disconnect****%1").arg(socketdescriptor);
@@ -48,8 +76,8 @@ void TCPsocket::tell_server_disconnected()
 void TCPsocket::user_disconnect()
 {
     sql_query.exec(QString("update users set online=0 where user_name='%1' ").arg(user_name));
+    if(timer_friend->isActive())timer_friend->stop();
 }
-
 void TCPsocket::check_byte(QByteArray &a){
     //qDebug()<<"start checking bytes";
     int cur=0;
@@ -176,8 +204,9 @@ void TCPsocket::upload_bytes(QByteArray &a){
     }
 
 
-}
 
+
+}
 void TCPsocket::handle_string() //工作原理与read_from_socket相同
 {
     QByteArray as=socket->readAll();
@@ -224,6 +253,7 @@ void TCPsocket::handle_string() //工作原理与read_from_socket相同
                 emit string_to_socket_ready(QString("user %1 login success").arg(list.at(1)), 2);
                 emit string_to_socket_ready(QString("login****success****登录成功"), 1);
                 fresh_file();
+                timer_friend->start();
             }
             else {
                 emit string_to_socket_ready(QString("login****fail****密码错误，请检查后重新登录。"), 1);
@@ -248,16 +278,19 @@ void TCPsocket::handle_string() //工作原理与read_from_socket相同
             emit string_to_socket_ready(QString("user %1 register success").arg(list.at(1)), 2);
             emit string_to_socket_ready(QString("register****success****恭喜您注册成功"), 1);
             fresh_file();
+            timer_friend->start();
         }
     }else if(mode=="logout"){
         sql_query.exec(QString("update users set online=0 where user_name='%1' ").arg(user_name));
+        if(timer_friend->isActive())timer_friend->stop();
+        friend_checked.clear();
     }else if(mode=="fresh"){
            fresh_file();
     }else if(mode=="download"){
         auto args=list.at(1).split("##");
         fileU tem;
         tem.file_name=args[0];
-        sql_query.exec(QString("select MD5,size from files where name='%1' and user_name").arg(tem.file_name).arg(user_name));
+        sql_query.exec(QString("select MD5,size from files where name='%1' and user_name='%2'").arg(tem.file_name).arg(user_name));
         sql_query.next();
         QString MD5_=sql_query.value(0).toString();
         int size=sql_query.value(1).toInt();
@@ -313,11 +346,66 @@ void TCPsocket::handle_string() //工作原理与read_from_socket相同
             }
         }
 
+    }else if(mode=="rename"){
+        auto args=list.at(1).split("##");
+        sql_query.exec(QString("update files set name='%1' where user_name='%2' and name='%2'")
+                       .arg(args[1]).arg(user_name).arg(args[0]));
+    }else if(mode=="delete"){
+        auto args=list.at(1);
+        QDateTime t=QDateTime::currentDateTime();
+        QString time=t.toString("dd hh:mm:ss.zzz");
+        sql_query.exec(QString("update files set name='%1' where user_name='%2' and name='%2'")
+                       .arg(time).arg(user_name).arg(args[0]));
+    }
+    else if(mode=="friend"){
+        QString target=list.at(1);
+        sql_query.exec(QString("select * from friends where user_name1='%1' and user_name2 ='%2'").arg(user_name).arg(target));
+        if(sql_query.next()){
+            qDebug()<<"重复添加好友";
+            continue;
+        }
+        sql_query.exec(QString("select online from users where user_name='%1'").arg(target));
+        if(!sql_query.next()){
+            qDebug()<<"用户不存在";
+            continue;
+        }
+        sql_query.exec(QString("insert into friends values('%1','%2',0)").arg(user_name).arg(target));
+    }else if(mode=="friendack"){
+        QString user_name1=list.at(1);
+        sql_query.exec(QString("select * from frineds where user_name1='%1' and user_name 2='%2' and accepted=0").arg(user_name1).arg(user_name));
+        if(sql_query.next()){
+            sql_query.exec(QString("update friends set accepted=2 where user_name1='%1' and user_name 2='%2'").arg(user_name1).arg(user_name));
+            sql_query.exec(QString("insert into friends values('%1','%2',1)").arg(user_name).arg(user_name1));
+        }
+    }else if(mode=="chatmsg"){
+        QString res="offlinemsg****";
+        sql_query.exec(QString("select * from messages where user_name2='%1' and sent=0").arg(user_name));
+        int first=1;
+        while(sql_query.next()){
+            if(first)first=0;
+            else res+="##";
+            res+=(sql_query.value(0).toString()+"$$"+sql_query.value(3).toString());
+        }
+        if(first==0)emit string_to_socket_ready(res,1);
+    }else if(mode=="friendlist"){
+        QString res="friendlist****";
+        sql_query.exec(QString("select user_name2 from friends where user_name1='%1' and accepted<>0").arg(user_name));
+        int first=1;
+        while(sql_query.next()){
+            if(first)first=0;
+            else res+="##";
+            res+=sql_query.value(0).toString();
+        }
+    }else if(mode=="send"){
+        auto args=list.at(1).split("$$");
+        QDateTime t=QDateTime::currentDateTime();
+        QString time=t.toString("yyyy.MM.dd hh:mm");
+        sql_query.exec(QString("insert into messages values('%1','%2',0,'%3','%4')")
+                       .arg(user_name).arg(args[0]).arg(args[1]).arg(time));
     }
 }
     check_byte(as);
 }
-
 void TCPsocket::process_file(){
     while(processed_cur<task_num){
         //qDebug()<<"download"<<processed_cur<<files_D[processed_cur].sending_block;
@@ -339,7 +427,7 @@ void TCPsocket::process_file(){
 }
 void TCPsocket::fresh_file(){   //查询并发送用户的文件信息
     QString res="fresh****";
-    sql_query.exec(QString("select name,size,time from files where user_name='%1'").arg(user_name));
+    sql_query.exec(QString("select name,size,time from files where user_name='%1' order by time desc").arg(user_name));
     int first=1;
     while(sql_query.next()){
         if(first)first=0;

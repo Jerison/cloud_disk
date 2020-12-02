@@ -7,6 +7,7 @@
 #include <QSqlQuery>
 #include <QFile>
 #include <QDateTime>
+#include <QTimer>
 class file{ //与Client相同
 public:
     QString file_name;
@@ -25,7 +26,6 @@ public:
     int sending_block=1;
     QByteArray buffer;
 };
-
 class TCPsocket : public QObject
 {
 	Q_OBJECT
@@ -54,10 +54,12 @@ private:
     QVector<fileU> files_D;
     int task_num=0,processed_cur=0,process_lock=1;
     int block_sent=0;               //当前块是否已经发送 避免重复发送同一个块
+    QTimer *timer_friend;
+    QSet<QString> friend_checked;
     void handle_string();           //处理收到的字符串
     void check_byte(QByteArray &a); //检测收到的字节流中是否存在文件块
     void upload_bytes(QByteArray &a);   //将收到字节流中的文件暂存到file的bs中
     void fresh_file();              //将用户拥有的文件信息发送给客户端
     void process_file();        //发送文件
-
+    void check_friend();
 };

@@ -15,10 +15,13 @@ void sql_(){
     QSqlQuery sql_query;
     sql_query.exec("create table if not exists users(user_name varchar(16) primary key,password varchar(16),online int default 0)");
     sql_query.exec("create table if not exists files(user_name varchar(16),MD5 char(32),name varchar(100),size int,time varchar(20),primary key(user_name,MD5))");
-    //sql_query.exec("insert into files (user_name,MA5,name) values ('123','11111111111111111111111111111111','123123')");
+    sql_query.exec("create table if not exists friends(user_name1 varchar(16),user_name2 varchar(16),accepted int default(0),primary key(user_name1,user_name2))");
+    sql_query.exec("create table if not exists messages(user_name1 varchar(16),user_name2 varchar(16),sent int default(0),message text,time varchar(20),primary key(user_name1,user_name2,time)");
+    //qDebug()<<database.lastError();
+
     sql_query.exec("update users set online =0");
-    //sql_query.exec("select * from files");
-    while(sql_query.next())qDebug()<<sql_query.value(0).toString()<<sql_query.value(1).toString()<<sql_query.value(2).toString()<<sql_query.value(3).toInt();
+    //sql_query.exec("select * from files order by time");
+    //while(sql_query.next())qDebug()<<sql_query.value(0).toString()<<sql_query.value(1).toString()<<sql_query.value(2).toString()<<sql_query.value(3).toInt()<<sql_query.value(4).toString();
 
 }
 int main(int argc, char *argv[])

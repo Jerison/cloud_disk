@@ -26,18 +26,20 @@ void TCPserver::incomingConnection(qintptr socketDescriptor)
 	qDebug() << "New thread,threads now:"<<threads.count();
 }
 
+
+
 void TCPserver::handle_string_from_socket(const QString & str)
 {
 	QStringList list = str.split("****");
 	if (list.at(0) == "disconnect") {
-		qDebug() << list.at(1);
-		qintptr tem = list.at(1).toLongLong();
-		if (threads.contains(tem) ){
-			threads.value(tem)->quit();
-			threads.remove(tem);
-			qDebug() <<"A thread quit,threads now:"<< threads.count();
-		}
-	}
+        qDebug() << list.at(1);
+        qintptr tem = list.at(1).toLongLong();
+        if (threads.contains(tem) ){
+            threads.value(tem)->quit();
+            threads.remove(tem);
+            qDebug() <<"A thread quit,threads now:"<< threads.count();
+        }
+    }
 	else if (list.at(0) == "debug") {
 		qDebug() << "Debug from thread:" << list.at(1);
 	}
