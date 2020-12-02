@@ -24,6 +24,7 @@ TCPsocket::TCPsocket(QObject *parent)
 TCPsocket::~TCPsocket()
 {
 }
+
 void TCPsocket::socket_init(const qintptr socketDescriptor)
 {
     files.resize(100);
@@ -48,6 +49,7 @@ void TCPsocket::user_disconnect()
 {
     sql_query.exec(QString("update users set online=0 where user_name='%1' ").arg(user_name));
 }
+
 void TCPsocket::check_byte(QByteArray &a){
     //qDebug()<<"start checking bytes";
     int cur=0;
@@ -174,9 +176,8 @@ void TCPsocket::upload_bytes(QByteArray &a){
     }
 
 
-
-
 }
+
 void TCPsocket::handle_string() //工作原理与read_from_socket相同
 {
     QByteArray as=socket->readAll();
@@ -316,6 +317,7 @@ void TCPsocket::handle_string() //工作原理与read_from_socket相同
 }
     check_byte(as);
 }
+
 void TCPsocket::process_file(){
     while(processed_cur<task_num){
         //qDebug()<<"download"<<processed_cur<<files_D[processed_cur].sending_block;

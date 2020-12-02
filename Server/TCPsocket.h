@@ -25,6 +25,7 @@ public:
     int sending_block=1;
     QByteArray buffer;
 };
+
 class TCPsocket : public QObject
 {
 	Q_OBJECT

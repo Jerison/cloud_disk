@@ -26,8 +26,6 @@ void TCPserver::incomingConnection(qintptr socketDescriptor)
 	qDebug() << "New thread,threads now:"<<threads.count();
 }
 
-
-
 void TCPserver::handle_string_from_socket(const QString & str)
 {
 	QStringList list = str.split("****");

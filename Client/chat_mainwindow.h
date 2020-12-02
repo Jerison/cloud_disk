@@ -1,22 +1,34 @@
-#ifndef CHAT_MAINWINDOW_H
-#define CHAT_MAINWINDOW_H
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QListWidgetItem>
+#include "chatmessage/qnchatmessage.h"
+#include "widget.h"
 
 namespace Ui {
-class Chat_MainWindow;
+class MainWindow;
 }
 
-class Chat_MainWindow : public QMainWindow
+class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit Chat_MainWindow(QWidget *parent = nullptr);
-    ~Chat_MainWindow();
+    explicit MainWindow(Widget *w, QWidget *parent = 0);
+    ~MainWindow();
+
+    void dealMessage(QNChatMessage *messageW, QListWidgetItem *item, QString text, QString time, QNChatMessage::User_Type type);
+    void dealMessageTime(QString curMsgTime);
+protected:
+    void resizeEvent(QResizeEvent *event);
+private slots:
+    void on_pushButton_clicked();
+    void on_pushButton_2_clicked();
 
 private:
-    Ui::Chat_MainWindow *ui;
+    Ui::MainWindow *ui;
+    Widget *main_w;
 };
 
-#endif // CHAT_MAINWINDOW_H
+#endif // MAINWINDOW_H

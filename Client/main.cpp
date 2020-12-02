@@ -1,5 +1,5 @@
 #include "widget.h"
-
+#include "chat_mainwindow.h"
 #include <QApplication>
 
 int main(int argc, char *argv[])
