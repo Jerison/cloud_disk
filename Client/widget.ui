@@ -17,7 +17,7 @@
    <item>
     <widget class="QStackedWidget" name="stackedWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>4</number>
      </property>
      <widget class="QWidget" name="page_3">
       <widget class="QWidget" name="widget_4" native="true">
@@ -533,42 +533,13 @@
       </widget>
      </widget>
      <widget class="QWidget" name="page_5">
-      <widget class="QTableWidget" name="FriendsList">
-       <property name="geometry">
-        <rect>
-         <x>60</x>
-         <y>60</y>
-         <width>421</width>
-         <height>512</height>
-        </rect>
-       </property>
-       <property name="columnCount">
-        <number>2</number>
-       </property>
-       <attribute name="horizontalHeaderCascadingSectionResizes">
-        <bool>false</bool>
-       </attribute>
-       <attribute name="horizontalHeaderDefaultSectionSize">
-        <number>200</number>
-       </attribute>
-       <column>
-        <property name="text">
-         <string>好友名</string>
-        </property>
-       </column>
-       <column>
-        <property name="text">
-         <string>消息摘要</string>
-        </property>
-       </column>
-      </widget>
       <widget class="QPushButton" name="AddFriends">
        <property name="geometry">
         <rect>
-         <x>570</x>
-         <y>160</y>
-         <width>151</width>
-         <height>71</height>
+         <x>620</x>
+         <y>170</y>
+         <width>121</width>
+         <height>51</height>
         </rect>
        </property>
        <property name="font">
@@ -584,10 +555,10 @@
       <widget class="QPushButton" name="StartChat">
        <property name="geometry">
         <rect>
-         <x>570</x>
-         <y>290</y>
-         <width>151</width>
-         <height>71</height>
+         <x>620</x>
+         <y>270</y>
+         <width>121</width>
+         <height>51</height>
         </rect>
        </property>
        <property name="font">
@@ -598,6 +569,141 @@
        </property>
        <property name="text">
         <string>开始对话</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="PassReq">
+       <property name="geometry">
+        <rect>
+         <x>620</x>
+         <y>370</y>
+         <width>121</width>
+         <height>51</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <family>黑体</family>
+         <pointsize>14</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>通过申请</string>
+       </property>
+      </widget>
+      <widget class="QTabWidget" name="tabWidget">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>20</y>
+         <width>511</width>
+         <height>561</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QTabBar::tab{width:175}
+QTabBar::tab{height:30}</string>
+       </property>
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
+       <widget class="QWidget" name="tab">
+        <attribute name="title">
+         <string>好友列表</string>
+        </attribute>
+        <widget class="QTableWidget" name="FriendsList">
+         <property name="geometry">
+          <rect>
+           <x>-20</x>
+           <y>-10</y>
+           <width>551</width>
+           <height>541</height>
+          </rect>
+         </property>
+         <property name="columnCount">
+          <number>2</number>
+         </property>
+         <attribute name="horizontalHeaderCascadingSectionResizes">
+          <bool>false</bool>
+         </attribute>
+         <attribute name="horizontalHeaderDefaultSectionSize">
+          <number>257</number>
+         </attribute>
+         <column>
+          <property name="text">
+           <string>好友名</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>消息摘要</string>
+          </property>
+         </column>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="tab_2">
+        <attribute name="title">
+         <string>申请列表</string>
+        </attribute>
+        <widget class="QTableWidget" name="ReqList">
+         <property name="geometry">
+          <rect>
+           <x>-10</x>
+           <y>-9</y>
+           <width>541</width>
+           <height>541</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <family>等线</family>
+           <pointsize>12</pointsize>
+          </font>
+         </property>
+         <property name="columnCount">
+          <number>1</number>
+         </property>
+         <attribute name="horizontalHeaderCascadingSectionResizes">
+          <bool>false</bool>
+         </attribute>
+         <attribute name="horizontalHeaderDefaultSectionSize">
+          <number>535</number>
+         </attribute>
+         <column>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>9</pointsize>
+           </font>
+          </property>
+         </column>
+        </widget>
+       </widget>
+      </widget>
+      <widget class="QPushButton" name="GoBack">
+       <property name="geometry">
+        <rect>
+         <x>610</x>
+         <y>60</y>
+         <width>141</width>
+         <height>51</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <family>黑体</family>
+         <pointsize>14</pointsize>
+        </font>
+       </property>
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border-image: url(:/img/back.png);</string>
+       </property>
+       <property name="text">
+        <string/>
        </property>
       </widget>
      </widget>

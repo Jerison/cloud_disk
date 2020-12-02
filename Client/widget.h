@@ -63,6 +63,8 @@ private slots:
     void on_shareCancel_clicked(); //取消分享
     void on_shareConfirm_clicked();//确认分享
     void on_StartChat_clicked(); //开启会话
+    void on_AddFriends_clicked();//点击添加好友
+    void on_GoBack_clicked();    //点击返回
 
 private:
     Ui::Widget *ui;

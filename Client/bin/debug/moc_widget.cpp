@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_Widget_t {
-    QByteArrayData data[14];
-    char stringdata0[257];
+    QByteArrayData data[16];
+    char stringdata0[297];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -44,7 +44,9 @@ QT_MOC_LITERAL(9, 153, 16), // "on_share_clicked"
 QT_MOC_LITERAL(10, 170, 18), // "on_session_clicked"
 QT_MOC_LITERAL(11, 189, 22), // "on_shareCancel_clicked"
 QT_MOC_LITERAL(12, 212, 23), // "on_shareConfirm_clicked"
-QT_MOC_LITERAL(13, 236, 20) // "on_StartChat_clicked"
+QT_MOC_LITERAL(13, 236, 20), // "on_StartChat_clicked"
+QT_MOC_LITERAL(14, 257, 21), // "on_AddFriends_clicked"
+QT_MOC_LITERAL(15, 279, 17) // "on_GoBack_clicked"
 
     },
     "Widget\0read_from_socket\0\0"
@@ -53,7 +55,8 @@ QT_MOC_LITERAL(13, 236, 20) // "on_StartChat_clicked"
     "on_download_clicked\0on_fresh_clicked\0"
     "on_share_clicked\0on_session_clicked\0"
     "on_shareCancel_clicked\0on_shareConfirm_clicked\0"
-    "on_StartChat_clicked"
+    "on_StartChat_clicked\0on_AddFriends_clicked\0"
+    "on_GoBack_clicked"
 };
 #undef QT_MOC_LITERAL
 
@@ -63,7 +66,7 @@ static const uint qt_meta_data_Widget[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      12,   14, // methods
+      14,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -71,20 +74,24 @@ static const uint qt_meta_data_Widget[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    0,   74,    2, 0x0a /* Public */,
-       3,    0,   75,    2, 0x08 /* Private */,
-       4,    0,   76,    2, 0x08 /* Private */,
-       5,    0,   77,    2, 0x08 /* Private */,
-       6,    0,   78,    2, 0x08 /* Private */,
-       7,    0,   79,    2, 0x08 /* Private */,
-       8,    0,   80,    2, 0x08 /* Private */,
-       9,    0,   81,    2, 0x08 /* Private */,
-      10,    0,   82,    2, 0x08 /* Private */,
-      11,    0,   83,    2, 0x08 /* Private */,
-      12,    0,   84,    2, 0x08 /* Private */,
-      13,    0,   85,    2, 0x08 /* Private */,
+       1,    0,   84,    2, 0x0a /* Public */,
+       3,    0,   85,    2, 0x08 /* Private */,
+       4,    0,   86,    2, 0x08 /* Private */,
+       5,    0,   87,    2, 0x08 /* Private */,
+       6,    0,   88,    2, 0x08 /* Private */,
+       7,    0,   89,    2, 0x08 /* Private */,
+       8,    0,   90,    2, 0x08 /* Private */,
+       9,    0,   91,    2, 0x08 /* Private */,
+      10,    0,   92,    2, 0x08 /* Private */,
+      11,    0,   93,    2, 0x08 /* Private */,
+      12,    0,   94,    2, 0x08 /* Private */,
+      13,    0,   95,    2, 0x08 /* Private */,
+      14,    0,   96,    2, 0x08 /* Private */,
+      15,    0,   97,    2, 0x08 /* Private */,
 
  // slots: parameters
+    QMetaType::Void,
+    QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
@@ -119,6 +126,8 @@ void Widget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void
         case 9: _t->on_shareCancel_clicked(); break;
         case 10: _t->on_shareConfirm_clicked(); break;
         case 11: _t->on_StartChat_clicked(); break;
+        case 12: _t->on_AddFriends_clicked(); break;
+        case 13: _t->on_GoBack_clicked(); break;
         default: ;
         }
     }
@@ -150,13 +159,13 @@ int Widget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 12)
+        if (_id < 14)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 12;
+        _id -= 14;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 12)
+        if (_id < 14)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 12;
+        _id -= 14;
     }
     return _id;
 }
