@@ -5,9 +5,14 @@ Widget::Widget(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::Widget) {
     ui->setupUi(this);
+    ui->FriendsList->setRowCount(1);
+    for(int i = 0; i< 1;i++){
+    //ui->FriendsList->setItem(i,0,new QTableWidgetItem("jerison"));
+    }
+
 
     socket = new QTcpSocket(this);
-    socket->connectToHost("62.234.142.180", 8888);  //  QHostAddress::LocalHost "62.234.142.180"
+    socket->connectToHost(QHostAddress::LocalHost, 8888);  //  QHostAddress::LocalHost "62.234.142.180"
     if (socket->waitForConnected()) {
         qDebug()<< "TCP connected";
     } else {
@@ -177,14 +182,14 @@ void Widget::read_from_socket() {
                 ui->files_2->setItem(i,2,new QTableWidgetItem(args[2]));
             }
         }
-        else if(mode == "friend"){
+        else if(mode == "friendlist"){
             auto args=list.at(1).split("##");
             ui->FriendsList->setRowCount(args.size());
             for(int i = 0; i< args.size();i++){
                 ui->FriendsList->setItem(i,0,new QTableWidgetItem(args[i]));
             }
         }
-        else if(mode == "chat"){
+        else if(mode == "chatmsg"){
             auto msgs = list.at(1).split("##");
             for(int i = 0;i < msgs.size(); i++ ){
                 auto args = msgs[i].split("$$");//每条信息的格式:来源$$消息
@@ -194,6 +199,9 @@ void Widget::read_from_socket() {
                 }
 
             }
+        }
+        else if(mode == "sentmsg"){
+
         }
     check_byte(as); //检测字节流中是否存在下载的文件字节
     }
@@ -444,9 +452,13 @@ void Widget::on_share_clicked() {
                         , QLineEdit::Normal,"", &ok);
     if (ok && !user_name.isEmpty()) {
         QMessageBox::information(this,"提示",QString("已尝试将文件%1分享给用户%2").arg(file_name).arg(user_name));
+        QString res=QString("share****%1##%2").arg(user_name).arg(file_name);   //发送分享请求
+        send_to_socket(res);
     }
-    QString res=QString("share****%1##%2").arg(user_name).arg(file_name);   //发送分享请求
-    send_to_socket(res);
+    else if(ok && user_name.isEmpty()){
+        QMessageBox::information(this,"提示",QString("用户名不可为空！"));
+        on_share_clicked();
+    }
 }
 
 void Widget::on_shareCancel_clicked(){
@@ -486,7 +498,28 @@ void Widget::show_cur_w()
 void Widget::on_StartChat_clicked()
 {
     MainWindow chat;
-    QString res = "friend****";
+    QString res = "friendlist****";
+    send_to_socket(res);
+    res = "chatmsg****";
     send_to_socket(res);
     show_cur_w();
+}
+
+void Widget::on_AddFriends_clicked(){
+    bool ok;
+    QString user_name = QInputDialog::getText(this,"输入用户名",tr("请输入对方用户名：")
+                        , QLineEdit::Normal,"", &ok);
+    if (ok && !user_name.isEmpty()) {
+        QMessageBox::information(this,"提示",QString("已向%1发送好友申请").arg(user_name));
+        QString res=QString("friend****%1").arg(user_name);   //发送好友申请
+        send_to_socket(res);
+    }
+    else if(ok && user_name.isEmpty()){
+        QMessageBox::information(this,"提示",QString("用户名不可为空！"));
+        on_AddFriends_clicked();
+    }
+}
+
+void Widget::on_GoBack_clicked(){
+    ui->stackedWidget->setCurrentIndex(1);
 }
