@@ -1,6 +1,5 @@
 #include "widget.h"
 #include "ui_widget.h"
-#include "chat_mainwindow.h"
 #define BLOCK_SIZE 8192
 Widget::Widget(QWidget *parent)
     : QWidget(parent)
@@ -16,9 +15,13 @@ Widget::Widget(QWidget *parent)
         QMessageBox::information(this, "提示", "无法连接到服务器!");
         exit(0);
     }
+
+    cur_w = new MainWindow();
+
     connect(socket, &QTcpSocket::readyRead, this, &Widget::read_from_socket);
     connect(ui->button_login, &QPushButton::clicked, this, &Widget::try_login);
     connect(ui->button_register, &QPushButton::clicked, this, &Widget::try_register);
+    connect(cur_w, &MainWindow::open_chat,this,&Widget::share_in_session);
     //将定时器与更新传输状态相连
     status_timer.setInterval(1000);
     connect(&status_timer,&QTimer::timeout,this,&Widget::fresh_status);
@@ -189,10 +192,11 @@ void Widget::read_from_socket() {
                     if(args[0] == ui->FriendsList->item(j,0)->text())
                         ui->FriendsList->setItem(j,1, new QTableWidgetItem(args[1]));
                 }
+
             }
         }
-    }
     check_byte(as); //检测字节流中是否存在下载的文件字节
+    }
 }
 void Widget::seek_next_up_cur() {   //寻找传输状态的下一个文件下标
     for(int i=status_up_cur+1; i<status.size(); i++) {
@@ -463,6 +467,7 @@ void Widget::on_shareConfirm_clicked(){
 }
 
 void Widget::share_in_session(QString user_name){
+    qDebug()<<"in!";
     ui->stackedWidget->setCurrentIndex(3);
     Cur_Target = user_name;
     QMessageBox::information(this,"提示","请选择要分享的文件。");
@@ -470,8 +475,18 @@ void Widget::share_in_session(QString user_name){
 
 void Widget::on_session_clicked()
 {
-    MainWindow *chat = new MainWindow(this);
-    (*chat).show();
+    ui->stackedWidget->setCurrentIndex(4);
+}
+
+void Widget::show_cur_w()
+{
+    cur_w->show();
+}
+
+void Widget::on_StartChat_clicked()
+{
+    MainWindow chat;
     QString res = "friend****";
     send_to_socket(res);
+    show_cur_w();
 }

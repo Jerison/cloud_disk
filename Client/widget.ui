@@ -17,7 +17,7 @@
    <item>
     <widget class="QStackedWidget" name="stackedWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="page_3">
       <widget class="QWidget" name="widget_4" native="true">
@@ -293,75 +293,6 @@
        </layout>
       </widget>
      </widget>
-     <widget class="QWidget" name="page_5">
-      <widget class="QTableWidget" name="FriendsList">
-       <property name="geometry">
-        <rect>
-         <x>60</x>
-         <y>60</y>
-         <width>421</width>
-         <height>512</height>
-        </rect>
-       </property>
-       <property name="columnCount">
-        <number>2</number>
-       </property>
-       <attribute name="horizontalHeaderCascadingSectionResizes">
-        <bool>false</bool>
-       </attribute>
-       <attribute name="horizontalHeaderDefaultSectionSize">
-        <number>200</number>
-       </attribute>
-       <column>
-        <property name="text">
-         <string>好友名</string>
-        </property>
-       </column>
-       <column>
-        <property name="text">
-         <string>消息摘要</string>
-        </property>
-       </column>
-      </widget>
-      <widget class="QPushButton" name="AddFriends">
-       <property name="geometry">
-        <rect>
-         <x>570</x>
-         <y>160</y>
-         <width>151</width>
-         <height>71</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <family>黑体</family>
-         <pointsize>14</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>添加好友</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="StartChat">
-       <property name="geometry">
-        <rect>
-         <x>570</x>
-         <y>290</y>
-         <width>151</width>
-         <height>71</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <family>黑体</family>
-         <pointsize>14</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>开始对话</string>
-       </property>
-      </widget>
-     </widget>
      <widget class="QWidget" name="page">
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
@@ -598,6 +529,75 @@
        </property>
        <property name="text">
         <string>取消</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="page_5">
+      <widget class="QTableWidget" name="FriendsList">
+       <property name="geometry">
+        <rect>
+         <x>60</x>
+         <y>60</y>
+         <width>421</width>
+         <height>512</height>
+        </rect>
+       </property>
+       <property name="columnCount">
+        <number>2</number>
+       </property>
+       <attribute name="horizontalHeaderCascadingSectionResizes">
+        <bool>false</bool>
+       </attribute>
+       <attribute name="horizontalHeaderDefaultSectionSize">
+        <number>200</number>
+       </attribute>
+       <column>
+        <property name="text">
+         <string>好友名</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>消息摘要</string>
+        </property>
+       </column>
+      </widget>
+      <widget class="QPushButton" name="AddFriends">
+       <property name="geometry">
+        <rect>
+         <x>570</x>
+         <y>160</y>
+         <width>151</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <family>黑体</family>
+         <pointsize>14</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>添加好友</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="StartChat">
+       <property name="geometry">
+        <rect>
+         <x>570</x>
+         <y>290</y>
+         <width>151</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <family>黑体</family>
+         <pointsize>14</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>开始对话</string>
        </property>
       </widget>
      </widget>

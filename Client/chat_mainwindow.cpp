@@ -3,14 +3,13 @@
 #include <QDateTime>
 #include <QDebug>
 
-MainWindow::MainWindow(Widget *w, QWidget *parent) :
+MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    setWindowTitle("New Chat");
+    setWindowTitle("NEW CHAT");
     resize(600, 800);
-    main_w = w;
 }
 
 MainWindow::~MainWindow()
@@ -68,7 +67,8 @@ void MainWindow::on_pushButton_clicked()    //点击发送键
 void MainWindow::on_pushButton_2_clicked()  //点击共享文件
 {
     qDebug()<<"CLICKED!";
-    main_w->share_in_session("jerison");
+    emit open_chat("jerison");
+    //main_w->share_in_session("jerison");
 }
 
 void MainWindow::dealMessage(QNChatMessage *messageW, QListWidgetItem *item, QString text, QString time,  QNChatMessage::User_Type type)
@@ -127,5 +127,9 @@ void MainWindow::resizeEvent(QResizeEvent *event)
 
         dealMessage(messageW, item, messageW->text(), messageW->time(), messageW->userType());
     }
+}
+
+QString MainWindow::getCurUser(){
+    return cur_user;
 }
 

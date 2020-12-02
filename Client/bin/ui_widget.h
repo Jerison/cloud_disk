@@ -52,10 +52,6 @@ public:
     QSpacerItem *horizontalSpacer;
     QPushButton *button_register;
     QSpacerItem *horizontalSpacer_3;
-    QWidget *page_5;
-    QTableWidget *FriendsList;
-    QPushButton *AddFriends;
-    QPushButton *StartChat;
     QWidget *page;
     QVBoxLayout *verticalLayout_3;
     QWidget *widget_5;
@@ -80,6 +76,10 @@ public:
     QTableWidget *files_2;
     QPushButton *shareConfirm;
     QPushButton *shareCancel;
+    QWidget *page_5;
+    QTableWidget *FriendsList;
+    QPushButton *AddFriends;
+    QPushButton *StartChat;
 
     void setupUi(QWidget *Widget)
     {
@@ -213,32 +213,6 @@ public:
         verticalLayout_2->addWidget(widget_3);
 
         stackedWidget->addWidget(page_3);
-        page_5 = new QWidget();
-        page_5->setObjectName(QStringLiteral("page_5"));
-        FriendsList = new QTableWidget(page_5);
-        if (FriendsList->columnCount() < 2)
-            FriendsList->setColumnCount(2);
-        QTableWidgetItem *__qtablewidgetitem = new QTableWidgetItem();
-        FriendsList->setHorizontalHeaderItem(0, __qtablewidgetitem);
-        QTableWidgetItem *__qtablewidgetitem1 = new QTableWidgetItem();
-        FriendsList->setHorizontalHeaderItem(1, __qtablewidgetitem1);
-        FriendsList->setObjectName(QStringLiteral("FriendsList"));
-        FriendsList->setGeometry(QRect(60, 60, 421, 512));
-        FriendsList->setColumnCount(2);
-        FriendsList->horizontalHeader()->setCascadingSectionResizes(false);
-        FriendsList->horizontalHeader()->setDefaultSectionSize(200);
-        AddFriends = new QPushButton(page_5);
-        AddFriends->setObjectName(QStringLiteral("AddFriends"));
-        AddFriends->setGeometry(QRect(570, 160, 151, 71));
-        QFont font3;
-        font3.setFamily(QString::fromUtf8("\351\273\221\344\275\223"));
-        font3.setPointSize(14);
-        AddFriends->setFont(font3);
-        StartChat = new QPushButton(page_5);
-        StartChat->setObjectName(QStringLiteral("StartChat"));
-        StartChat->setGeometry(QRect(570, 290, 151, 71));
-        StartChat->setFont(font3);
-        stackedWidget->addWidget(page_5);
         page = new QWidget();
         page->setObjectName(QStringLiteral("page"));
         verticalLayout_3 = new QVBoxLayout(page);
@@ -301,18 +275,18 @@ public:
         files = new QTableWidget(page);
         if (files->columnCount() < 3)
             files->setColumnCount(3);
+        QTableWidgetItem *__qtablewidgetitem = new QTableWidgetItem();
+        files->setHorizontalHeaderItem(0, __qtablewidgetitem);
+        QTableWidgetItem *__qtablewidgetitem1 = new QTableWidgetItem();
+        files->setHorizontalHeaderItem(1, __qtablewidgetitem1);
         QTableWidgetItem *__qtablewidgetitem2 = new QTableWidgetItem();
-        files->setHorizontalHeaderItem(0, __qtablewidgetitem2);
-        QTableWidgetItem *__qtablewidgetitem3 = new QTableWidgetItem();
-        files->setHorizontalHeaderItem(1, __qtablewidgetitem3);
-        QTableWidgetItem *__qtablewidgetitem4 = new QTableWidgetItem();
-        files->setHorizontalHeaderItem(2, __qtablewidgetitem4);
+        files->setHorizontalHeaderItem(2, __qtablewidgetitem2);
         if (files->rowCount() < 1)
             files->setRowCount(1);
-        QTableWidgetItem *__qtablewidgetitem5 = new QTableWidgetItem();
-        files->setVerticalHeaderItem(0, __qtablewidgetitem5);
-        QTableWidgetItem *__qtablewidgetitem6 = new QTableWidgetItem();
-        files->setItem(0, 0, __qtablewidgetitem6);
+        QTableWidgetItem *__qtablewidgetitem3 = new QTableWidgetItem();
+        files->setVerticalHeaderItem(0, __qtablewidgetitem3);
+        QTableWidgetItem *__qtablewidgetitem4 = new QTableWidgetItem();
+        files->setItem(0, 0, __qtablewidgetitem4);
         files->setObjectName(QStringLiteral("files"));
         files->horizontalHeader()->setDefaultSectionSize(200);
         files->horizontalHeader()->setMinimumSectionSize(28);
@@ -346,12 +320,12 @@ public:
         transport = new QTableWidget(page_2);
         if (transport->columnCount() < 3)
             transport->setColumnCount(3);
+        QTableWidgetItem *__qtablewidgetitem5 = new QTableWidgetItem();
+        transport->setHorizontalHeaderItem(0, __qtablewidgetitem5);
+        QTableWidgetItem *__qtablewidgetitem6 = new QTableWidgetItem();
+        transport->setHorizontalHeaderItem(1, __qtablewidgetitem6);
         QTableWidgetItem *__qtablewidgetitem7 = new QTableWidgetItem();
-        transport->setHorizontalHeaderItem(0, __qtablewidgetitem7);
-        QTableWidgetItem *__qtablewidgetitem8 = new QTableWidgetItem();
-        transport->setHorizontalHeaderItem(1, __qtablewidgetitem8);
-        QTableWidgetItem *__qtablewidgetitem9 = new QTableWidgetItem();
-        transport->setHorizontalHeaderItem(2, __qtablewidgetitem9);
+        transport->setHorizontalHeaderItem(2, __qtablewidgetitem7);
         transport->setObjectName(QStringLiteral("transport"));
         transport->horizontalHeader()->setCascadingSectionResizes(false);
         transport->horizontalHeader()->setDefaultSectionSize(200);
@@ -364,18 +338,18 @@ public:
         files_2 = new QTableWidget(page_4);
         if (files_2->columnCount() < 3)
             files_2->setColumnCount(3);
+        QTableWidgetItem *__qtablewidgetitem8 = new QTableWidgetItem();
+        files_2->setHorizontalHeaderItem(0, __qtablewidgetitem8);
+        QTableWidgetItem *__qtablewidgetitem9 = new QTableWidgetItem();
+        files_2->setHorizontalHeaderItem(1, __qtablewidgetitem9);
         QTableWidgetItem *__qtablewidgetitem10 = new QTableWidgetItem();
-        files_2->setHorizontalHeaderItem(0, __qtablewidgetitem10);
-        QTableWidgetItem *__qtablewidgetitem11 = new QTableWidgetItem();
-        files_2->setHorizontalHeaderItem(1, __qtablewidgetitem11);
-        QTableWidgetItem *__qtablewidgetitem12 = new QTableWidgetItem();
-        files_2->setHorizontalHeaderItem(2, __qtablewidgetitem12);
+        files_2->setHorizontalHeaderItem(2, __qtablewidgetitem10);
         if (files_2->rowCount() < 1)
             files_2->setRowCount(1);
-        QTableWidgetItem *__qtablewidgetitem13 = new QTableWidgetItem();
-        files_2->setVerticalHeaderItem(0, __qtablewidgetitem13);
-        QTableWidgetItem *__qtablewidgetitem14 = new QTableWidgetItem();
-        files_2->setItem(0, 0, __qtablewidgetitem14);
+        QTableWidgetItem *__qtablewidgetitem11 = new QTableWidgetItem();
+        files_2->setVerticalHeaderItem(0, __qtablewidgetitem11);
+        QTableWidgetItem *__qtablewidgetitem12 = new QTableWidgetItem();
+        files_2->setItem(0, 0, __qtablewidgetitem12);
         files_2->setObjectName(QStringLiteral("files_2"));
         files_2->setGeometry(QRect(10, 10, 751, 511));
         files_2->horizontalHeader()->setDefaultSectionSize(200);
@@ -388,13 +362,39 @@ public:
         shareCancel->setObjectName(QStringLiteral("shareCancel"));
         shareCancel->setGeometry(QRect(110, 530, 171, 41));
         stackedWidget->addWidget(page_4);
+        page_5 = new QWidget();
+        page_5->setObjectName(QStringLiteral("page_5"));
+        FriendsList = new QTableWidget(page_5);
+        if (FriendsList->columnCount() < 2)
+            FriendsList->setColumnCount(2);
+        QTableWidgetItem *__qtablewidgetitem13 = new QTableWidgetItem();
+        FriendsList->setHorizontalHeaderItem(0, __qtablewidgetitem13);
+        QTableWidgetItem *__qtablewidgetitem14 = new QTableWidgetItem();
+        FriendsList->setHorizontalHeaderItem(1, __qtablewidgetitem14);
+        FriendsList->setObjectName(QStringLiteral("FriendsList"));
+        FriendsList->setGeometry(QRect(60, 60, 421, 512));
+        FriendsList->setColumnCount(2);
+        FriendsList->horizontalHeader()->setCascadingSectionResizes(false);
+        FriendsList->horizontalHeader()->setDefaultSectionSize(200);
+        AddFriends = new QPushButton(page_5);
+        AddFriends->setObjectName(QStringLiteral("AddFriends"));
+        AddFriends->setGeometry(QRect(570, 160, 151, 71));
+        QFont font3;
+        font3.setFamily(QString::fromUtf8("\351\273\221\344\275\223"));
+        font3.setPointSize(14);
+        AddFriends->setFont(font3);
+        StartChat = new QPushButton(page_5);
+        StartChat->setObjectName(QStringLiteral("StartChat"));
+        StartChat->setGeometry(QRect(570, 290, 151, 71));
+        StartChat->setFont(font3);
+        stackedWidget->addWidget(page_5);
 
         verticalLayout->addWidget(stackedWidget);
 
 
         retranslateUi(Widget);
 
-        stackedWidget->setCurrentIndex(1);
+        stackedWidget->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(Widget);
@@ -410,12 +410,6 @@ public:
         edit_password->setText(QApplication::translate("Widget", "123456", Q_NULLPTR));
         button_login->setText(QApplication::translate("Widget", "\347\231\273\345\275\225", Q_NULLPTR));
         button_register->setText(QApplication::translate("Widget", "\346\263\250\345\206\214", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem = FriendsList->horizontalHeaderItem(0);
-        ___qtablewidgetitem->setText(QApplication::translate("Widget", "\345\245\275\345\217\213\345\220\215", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem1 = FriendsList->horizontalHeaderItem(1);
-        ___qtablewidgetitem1->setText(QApplication::translate("Widget", "\346\266\210\346\201\257\346\221\230\350\246\201", Q_NULLPTR));
-        AddFriends->setText(QApplication::translate("Widget", "\346\267\273\345\212\240\345\245\275\345\217\213", Q_NULLPTR));
-        StartChat->setText(QApplication::translate("Widget", "\345\274\200\345\247\213\345\257\271\350\257\235", Q_NULLPTR));
         session->setText(QApplication::translate("Widget", "\345\245\275\345\217\213\345\210\227\350\241\250", Q_NULLPTR));
         upload->setText(QApplication::translate("Widget", "\344\270\212\344\274\240", Q_NULLPTR));
         download->setText(QApplication::translate("Widget", "\344\270\213\350\275\275", Q_NULLPTR));
@@ -424,14 +418,14 @@ public:
         fresh->setText(QApplication::translate("Widget", "\345\210\267\346\226\260\347\233\256\345\275\225", Q_NULLPTR));
         label_user_name->setText(QApplication::translate("Widget", "\347\224\250\346\210\267\357\274\232", Q_NULLPTR));
         Button_logout->setText(QApplication::translate("Widget", "\347\231\273\345\207\272", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem2 = files->horizontalHeaderItem(0);
-        ___qtablewidgetitem2->setText(QApplication::translate("Widget", "\346\226\207\344\273\266\345\220\215", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem3 = files->horizontalHeaderItem(1);
-        ___qtablewidgetitem3->setText(QApplication::translate("Widget", "\346\226\207\344\273\266\345\244\247\345\260\217", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem4 = files->horizontalHeaderItem(2);
-        ___qtablewidgetitem4->setText(QApplication::translate("Widget", "\344\270\212\344\274\240\346\227\266\351\227\264", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem5 = files->verticalHeaderItem(0);
-        ___qtablewidgetitem5->setText(QApplication::translate("Widget", "1", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem = files->horizontalHeaderItem(0);
+        ___qtablewidgetitem->setText(QApplication::translate("Widget", "\346\226\207\344\273\266\345\220\215", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem1 = files->horizontalHeaderItem(1);
+        ___qtablewidgetitem1->setText(QApplication::translate("Widget", "\346\226\207\344\273\266\345\244\247\345\260\217", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem2 = files->horizontalHeaderItem(2);
+        ___qtablewidgetitem2->setText(QApplication::translate("Widget", "\344\270\212\344\274\240\346\227\266\351\227\264", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem3 = files->verticalHeaderItem(0);
+        ___qtablewidgetitem3->setText(QApplication::translate("Widget", "1", Q_NULLPTR));
 
         const bool __sortingEnabled = files->isSortingEnabled();
         files->setSortingEnabled(false);
@@ -439,20 +433,20 @@ public:
 
         pushButton_6->setText(QApplication::translate("Widget", "\350\277\224\345\233\236\346\226\207\344\273\266\347\233\256\345\275\225", Q_NULLPTR));
         label->setText(QString());
-        QTableWidgetItem *___qtablewidgetitem6 = transport->horizontalHeaderItem(0);
-        ___qtablewidgetitem6->setText(QApplication::translate("Widget", "\346\226\207\344\273\266\345\220\215", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem7 = transport->horizontalHeaderItem(1);
-        ___qtablewidgetitem7->setText(QApplication::translate("Widget", "\346\226\207\344\273\266\345\244\247\345\260\217", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem8 = transport->horizontalHeaderItem(2);
-        ___qtablewidgetitem8->setText(QApplication::translate("Widget", "\344\274\240\350\276\223\350\277\233\345\272\246", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem9 = files_2->horizontalHeaderItem(0);
-        ___qtablewidgetitem9->setText(QApplication::translate("Widget", "\346\226\207\344\273\266\345\220\215", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem10 = files_2->horizontalHeaderItem(1);
-        ___qtablewidgetitem10->setText(QApplication::translate("Widget", "\346\226\207\344\273\266\345\244\247\345\260\217", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem11 = files_2->horizontalHeaderItem(2);
-        ___qtablewidgetitem11->setText(QApplication::translate("Widget", "\344\270\212\344\274\240\346\227\266\351\227\264", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem12 = files_2->verticalHeaderItem(0);
-        ___qtablewidgetitem12->setText(QApplication::translate("Widget", "1", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem4 = transport->horizontalHeaderItem(0);
+        ___qtablewidgetitem4->setText(QApplication::translate("Widget", "\346\226\207\344\273\266\345\220\215", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem5 = transport->horizontalHeaderItem(1);
+        ___qtablewidgetitem5->setText(QApplication::translate("Widget", "\346\226\207\344\273\266\345\244\247\345\260\217", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem6 = transport->horizontalHeaderItem(2);
+        ___qtablewidgetitem6->setText(QApplication::translate("Widget", "\344\274\240\350\276\223\350\277\233\345\272\246", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem7 = files_2->horizontalHeaderItem(0);
+        ___qtablewidgetitem7->setText(QApplication::translate("Widget", "\346\226\207\344\273\266\345\220\215", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem8 = files_2->horizontalHeaderItem(1);
+        ___qtablewidgetitem8->setText(QApplication::translate("Widget", "\346\226\207\344\273\266\345\244\247\345\260\217", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem9 = files_2->horizontalHeaderItem(2);
+        ___qtablewidgetitem9->setText(QApplication::translate("Widget", "\344\270\212\344\274\240\346\227\266\351\227\264", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem10 = files_2->verticalHeaderItem(0);
+        ___qtablewidgetitem10->setText(QApplication::translate("Widget", "1", Q_NULLPTR));
 
         const bool __sortingEnabled1 = files_2->isSortingEnabled();
         files_2->setSortingEnabled(false);
@@ -460,6 +454,12 @@ public:
 
         shareConfirm->setText(QApplication::translate("Widget", "\347\241\256\345\256\232", Q_NULLPTR));
         shareCancel->setText(QApplication::translate("Widget", "\345\217\226\346\266\210", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem11 = FriendsList->horizontalHeaderItem(0);
+        ___qtablewidgetitem11->setText(QApplication::translate("Widget", "\345\245\275\345\217\213\345\220\215", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem12 = FriendsList->horizontalHeaderItem(1);
+        ___qtablewidgetitem12->setText(QApplication::translate("Widget", "\346\266\210\346\201\257\346\221\230\350\246\201", Q_NULLPTR));
+        AddFriends->setText(QApplication::translate("Widget", "\346\267\273\345\212\240\345\245\275\345\217\213", Q_NULLPTR));
+        StartChat->setText(QApplication::translate("Widget", "\345\274\200\345\247\213\345\257\271\350\257\235", Q_NULLPTR));
     } // retranslateUi
 
 };
