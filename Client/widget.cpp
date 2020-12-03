@@ -389,6 +389,9 @@ void Widget::on_pushButton_5_clicked() {
 
 void Widget::on_Button_logout_clicked() {
     ui->stackedWidget->setCurrentIndex(0);
+    ui->transport->setRowCount(0);
+    status.clear();
+    status_up_cur=status_down_cur=-1;
     QString res="logout****";
     send_to_socket(res);
 }
@@ -681,9 +684,9 @@ void Widget::on_rename_clicked()
     bool ok;
     QString changed_name = QInputDialog::getText(this,"输入文件名",tr("请输入修改后的文件名：")
                                               , QLineEdit::Normal,file_name, &ok);
-    if (ok && !user_name.isEmpty()) {
+    if (ok && !changed_name.isEmpty()) {
         int num=0;
-        for(int i=0;i<ui->files->columnCount();i++){
+        for(int i=0;i<ui->files->rowCount();i++){
             if(ui->files->item(i,0)->text()==changed_name)num++;
         }
         if(num!=0){
@@ -692,7 +695,7 @@ void Widget::on_rename_clicked()
         }
         QString res=QString("rename****%1##%2").arg(file_name).arg(changed_name);   //发送分享请求
         send_to_socket(res);
-    }else if(ok && user_name.isEmpty()){
+    }else if(ok && changed_name.isEmpty()){
         QMessageBox::information(this,"提示",QString("文件名不可为空！"));
         return;
     }

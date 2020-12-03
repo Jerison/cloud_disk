@@ -62,7 +62,7 @@ void TCPsocket::check_friend(){
     if(first==0)
     {
         emit string_to_socket_ready(add_friend,1);
-        qDebug()<<"sent: "<<add_friend;
+        //qDebug()<<"sent: "<<add_friend;
     }
     sql_query.exec(QString("select * from friends where user_name1='%1' and accepted=2").arg(user_name));
     while(sql_query.next()){
@@ -76,7 +76,7 @@ void TCPsocket::check_friend(){
         QString user_name1=sql_query.value(0).toString();
         QString res="onlinemsg****"+user_name1+"$$"+sql_query.value(3).toString();
         QString time=sql_query.value(4).toString();
-        qDebug()<<"sent onlinemsg";
+        //qDebug()<<"sent onlinemsg";
         emit string_to_socket_ready(res,1);
         sql_query2.exec(QString("update messages set sent=1 where user_name1='%1' and user_name2 ='%2' and time='%3'")
                         .arg(user_name1).arg(user_name).arg(time));
@@ -188,7 +188,7 @@ void TCPsocket::upload_bytes(QByteArray &a){
         emit string_to_socket_ready(QString("upload****%1##%2").arg(index).arg(res),1);
         return;
     }
-    qDebug()<<"upload"<<index<<cur;
+    //qDebug()<<"upload"<<index<<cur;
     int start=a.indexOf("$");
     int i;
     for(i=start+1;i<a.size()-4;i++){
@@ -349,7 +349,7 @@ void TCPsocket::handle_string() //工作原理与read_from_socket相同
         auto args=list.at(1).split("##");
         sql_query.exec(QString("select * from users where user_name='%1'").arg(args[0]));
         if(sql_query.next()){
-            sql_query.exec(QString("select * from files where user_name='%1' and name='%2'").arg(args[0]).arg(list.at(1)));
+            sql_query.exec(QString("select * from files where user_name='%1' and name='%2'").arg(args[0]).arg(args[1]));
             if(sql_query.next()){
                 continue;
             }else{
@@ -385,12 +385,12 @@ void TCPsocket::handle_string() //工作原理与read_from_socket相同
         QString target=list.at(1);
         sql_query.exec(QString("select * from friends where user_name1='%1' and user_name2 ='%2'").arg(user_name).arg(target));
         if(sql_query.next()){
-            qDebug()<<"重复添加好友";
+            //qDebug()<<"重复添加好友";
             continue;
         }
         sql_query.exec(QString("select online from users where user_name='%1'").arg(target));
         if(!sql_query.next()){
-            qDebug()<<"用户不存在";
+            //qDebug()<<"用户不存在";
             continue;
         }
         sql_query.exec(QString("insert into friends values('%1','%2',0)").arg(user_name).arg(target));
@@ -400,17 +400,17 @@ void TCPsocket::handle_string() //工作原理与read_from_socket相同
         if(sql_query.next()){
             sql_query.exec(QString("update friends set accepted=2 where user_name1='%1' and user_name2='%2'").arg(user_name1).arg(user_name));
             sql_query.exec(QString("insert into friends values('%1','%2',1)").arg(user_name).arg(user_name1));
-            qDebug()<<"accepted!";
+            //qDebug()<<"accepted!";
         }       
     }else if(mode=="friendrej"){
         QString user_name1=list.at(1);
         sql_query.exec(QString("select * from friends where user_name1='%1' and user_name2='%2' and accepted=0").arg(user_name1).arg(user_name));
         if(sql_query.next()){
             sql_query.exec(QString("delete from friends where user_name1='%1' and user_name2='%2'").arg(user_name1).arg(user_name));
-            qDebug()<<"rejected!";
+            //qDebug()<<"rejected!";
         }
     }else if(mode=="chatmsg"){
-        qDebug()<<"received chatmsg request!";
+        //qDebug()<<"received chatmsg request!";
         QString res="offlinemsg****";
         sql_query.exec(QString("select * from messages where user_name2='%1' and sent=0").arg(user_name));
         int first=1;
@@ -426,7 +426,7 @@ void TCPsocket::handle_string() //工作原理与read_from_socket相同
 
         if(first==0){
             emit string_to_socket_ready(res,1);
-            qDebug()<<"sent offlinemsg:"<<res;
+            //qDebug()<<"sent offlinemsg:"<<res;
         }
     }else if(mode=="friendlist"){
         QString res="friendlist****";
@@ -439,7 +439,7 @@ void TCPsocket::handle_string() //工作原理与read_from_socket相同
         }
         emit string_to_socket_ready(res,1);
     }else if(mode=="send"){
-        qDebug()<<"received send request: "<<list.at(1);
+        //qDebug()<<"received send request: "<<list.at(1);
         auto args=list.at(1).split("$$");
         QDateTime t=QDateTime::currentDateTime();
         QString time=t.toString("MM.dd hh:mm:ss:zzz");
