@@ -14,11 +14,12 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    explicit MainWindow(QString user_name, QWidget *parent = 0);
     ~MainWindow();
 
     void dealMessage(QNChatMessage *messageW, QListWidgetItem *item, QString text, QString time, QNChatMessage::User_Type type);
     void dealMessageTime(QString curMsgTime);
+    void showMsg(QString msg);
     QString getCurUser();
 protected:
     void resizeEvent(QResizeEvent *event);
@@ -27,6 +28,8 @@ private slots:
     void on_pushButton_2_clicked();
 signals:
     void open_chat(QString username);
+    void send_msg(QString msg);
+    void close_cur_w();
 
 private:
     Ui::MainWindow *ui;

@@ -16,7 +16,7 @@ void sql_(){
     sql_query.exec("create table if not exists users(user_name varchar(16) primary key,password varchar(16),online int default 0)");
     sql_query.exec("create table if not exists files(user_name varchar(16),MD5 char(32),name varchar(100),size int,time varchar(20),primary key(user_name,MD5))");
     sql_query.exec("create table if not exists friends(user_name1 varchar(16),user_name2 varchar(16),accepted int default(0),primary key(user_name1,user_name2))");
-    sql_query.exec("create table if not exists messages(user_name1 varchar(16),user_name2 varchar(16),sent int default(0),message text,time varchar(20),primary key(user_name1,user_name2,time)");
+    sql_query.exec("create table if not exists messages(user_name1 varchar(16),user_name2 varchar(16),sent int default(0),message text,time varchar(20),primary key(user_name1,user_name2,time))");
     //qDebug()<<database.lastError();
 
     sql_query.exec("update users set online =0");

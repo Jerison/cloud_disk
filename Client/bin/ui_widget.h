@@ -87,6 +87,7 @@ public:
     QWidget *tab_2;
     QTableWidget *ReqList;
     QPushButton *GoBack;
+    QPushButton *RejReq;
 
     void setupUi(QWidget *Widget)
     {
@@ -295,6 +296,7 @@ public:
         QTableWidgetItem *__qtablewidgetitem4 = new QTableWidgetItem();
         files->setItem(0, 0, __qtablewidgetitem4);
         files->setObjectName(QStringLiteral("files"));
+        files->setEditTriggers(QAbstractItemView::NoEditTriggers);
         files->horizontalHeader()->setDefaultSectionSize(200);
         files->horizontalHeader()->setMinimumSectionSize(28);
         files->verticalHeader()->setDefaultSectionSize(28);
@@ -334,6 +336,7 @@ public:
         QTableWidgetItem *__qtablewidgetitem7 = new QTableWidgetItem();
         transport->setHorizontalHeaderItem(2, __qtablewidgetitem7);
         transport->setObjectName(QStringLiteral("transport"));
+        transport->setEditTriggers(QAbstractItemView::NoEditTriggers);
         transport->horizontalHeader()->setCascadingSectionResizes(false);
         transport->horizontalHeader()->setDefaultSectionSize(200);
 
@@ -359,6 +362,7 @@ public:
         files_2->setItem(0, 0, __qtablewidgetitem12);
         files_2->setObjectName(QStringLiteral("files_2"));
         files_2->setGeometry(QRect(10, 10, 751, 511));
+        files_2->setEditTriggers(QAbstractItemView::NoEditTriggers);
         files_2->horizontalHeader()->setDefaultSectionSize(200);
         files_2->horizontalHeader()->setMinimumSectionSize(28);
         files_2->verticalHeader()->setDefaultSectionSize(28);
@@ -384,7 +388,7 @@ public:
         StartChat->setFont(font3);
         PassReq = new QPushButton(page_5);
         PassReq->setObjectName(QStringLiteral("PassReq"));
-        PassReq->setGeometry(QRect(620, 370, 121, 51));
+        PassReq->setGeometry(QRect(640, 170, 81, 51));
         PassReq->setFont(font3);
         tabWidget = new QTabWidget(page_5);
         tabWidget->setObjectName(QStringLiteral("tabWidget"));
@@ -402,6 +406,7 @@ public:
         FriendsList->setHorizontalHeaderItem(1, __qtablewidgetitem14);
         FriendsList->setObjectName(QStringLiteral("FriendsList"));
         FriendsList->setGeometry(QRect(-20, -10, 551, 541));
+        FriendsList->setEditTriggers(QAbstractItemView::NoEditTriggers);
         FriendsList->setColumnCount(2);
         FriendsList->horizontalHeader()->setCascadingSectionResizes(false);
         FriendsList->horizontalHeader()->setDefaultSectionSize(257);
@@ -417,21 +422,26 @@ public:
         __qtablewidgetitem15->setFont(font4);
         ReqList->setHorizontalHeaderItem(0, __qtablewidgetitem15);
         ReqList->setObjectName(QStringLiteral("ReqList"));
-        ReqList->setGeometry(QRect(-10, -9, 541, 541));
+        ReqList->setGeometry(QRect(0, -30, 541, 561));
         QFont font5;
         font5.setFamily(QString::fromUtf8("\347\255\211\347\272\277"));
         font5.setPointSize(12);
         ReqList->setFont(font5);
+        ReqList->setEditTriggers(QAbstractItemView::NoEditTriggers);
         ReqList->setColumnCount(1);
         ReqList->horizontalHeader()->setCascadingSectionResizes(false);
         ReqList->horizontalHeader()->setDefaultSectionSize(535);
         tabWidget->addTab(tab_2, QString());
         GoBack = new QPushButton(page_5);
         GoBack->setObjectName(QStringLiteral("GoBack"));
-        GoBack->setGeometry(QRect(610, 60, 141, 51));
+        GoBack->setGeometry(QRect(610, 470, 141, 51));
         GoBack->setFont(font3);
         GoBack->setCursor(QCursor(Qt::PointingHandCursor));
         GoBack->setStyleSheet(QStringLiteral("border-image: url(:/img/back.png);"));
+        RejReq = new QPushButton(page_5);
+        RejReq->setObjectName(QStringLiteral("RejReq"));
+        RejReq->setGeometry(QRect(640, 270, 81, 51));
+        RejReq->setFont(font3);
         stackedWidget->addWidget(page_5);
 
         verticalLayout->addWidget(stackedWidget);
@@ -439,7 +449,7 @@ public:
 
         retranslateUi(Widget);
 
-        stackedWidget->setCurrentIndex(4);
+        stackedWidget->setCurrentIndex(0);
         tabWidget->setCurrentIndex(0);
 
 
@@ -502,7 +512,7 @@ public:
         shareCancel->setText(QApplication::translate("Widget", "\345\217\226\346\266\210", Q_NULLPTR));
         AddFriends->setText(QApplication::translate("Widget", "\346\267\273\345\212\240\345\245\275\345\217\213", Q_NULLPTR));
         StartChat->setText(QApplication::translate("Widget", "\345\274\200\345\247\213\345\257\271\350\257\235", Q_NULLPTR));
-        PassReq->setText(QApplication::translate("Widget", "\351\200\232\350\277\207\347\224\263\350\257\267", Q_NULLPTR));
+        PassReq->setText(QApplication::translate("Widget", "Y", Q_NULLPTR));
         QTableWidgetItem *___qtablewidgetitem11 = FriendsList->horizontalHeaderItem(0);
         ___qtablewidgetitem11->setText(QApplication::translate("Widget", "\345\245\275\345\217\213\345\220\215", Q_NULLPTR));
         QTableWidgetItem *___qtablewidgetitem12 = FriendsList->horizontalHeaderItem(1);
@@ -510,6 +520,7 @@ public:
         tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("Widget", "\345\245\275\345\217\213\345\210\227\350\241\250", Q_NULLPTR));
         tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("Widget", "\347\224\263\350\257\267\345\210\227\350\241\250", Q_NULLPTR));
         GoBack->setText(QString());
+        RejReq->setText(QApplication::translate("Widget", "N", Q_NULLPTR));
     } // retranslateUi
 
 };
