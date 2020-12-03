@@ -69,6 +69,10 @@ private slots:
     void on_PassReq_clicked();   //点击通过好友请求
     void on_RejReq_clicked();   //点击拒绝好友请求
 
+    void on_rename_clicked();
+
+    void on_delete_file_clicked();
+
 private:
     Ui::Widget *ui;
     QTcpSocket *socket; //连接服务器
