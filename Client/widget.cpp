@@ -5,14 +5,16 @@ Widget::Widget(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::Widget) {
     ui->setupUi(this);
+    ui->fresh->hide();
+    ui->share->hide();
     ui->FriendsList->setRowCount(1);
     set_hidden(1);
     for(int i = 0; i< 1;i++){
         //ui->FriendsList->setItem(i,0,new QTableWidgetItem("jerison"));
     }
-
+    this->resize(858,600);
     socket = new QTcpSocket(this);
-    socket->connectToHost(QHostAddress::LocalHost, 8888);  //  QHostAddress::LocalHost "62.234.142.180"
+    socket->connectToHost("62.234.142.180", 8888);  //  QHostAddress::LocalHost "62.234.142.180"
     if (socket->waitForConnected()) {
         qDebug()<< "TCP connected";
     } else {
@@ -32,15 +34,16 @@ Widget::Widget(QWidget *parent)
     connect(&status_timer,&QTimer::timeout,this,&Widget::fresh_status);
     status_timer.start();
     //设置两个table widget的列宽
-    int width=764;
+    int width=800;
     ui->files->setColumnWidth(0,0.45*width);
     ui->files->setColumnWidth(1,0.2*width);
     ui->files->setColumnWidth(2,0.3*width);
-    ui->fresh->hide();
     ui->transport->setColumnWidth(0,0.45*width);
     ui->transport->setColumnWidth(1,0.2*width);
     ui->transport->setColumnWidth(2,0.3*width);
-
+    ui->files_2->setColumnWidth(0,0.45*width);
+    ui->files_2->setColumnWidth(1,0.2*width);
+    ui->files_2->setColumnWidth(2,0.3*width);
     waiting_req = 0;
 
 }
@@ -62,12 +65,18 @@ void Widget::fresh_status() {
 void Widget::try_login() {  //将登录信息以 login****用户名****密码 的方式发送给服务端验证
     user_name = ui->edit_username->text();
     if (user_name.length() < 6) {
-        QMessageBox::information(this, "提示", "用户名长度应至少六位，请重新输入。");
+        QMessageBox::information(this, "提示", "用户名长度应至少6位，请重新输入。");
+        return;
+    }else if(user_name.length() > 16){
+        QMessageBox::information(this, "提示", "用户名长度最多为16位，请重新输入。");
         return;
     }
     QString password = ui->edit_password->text();
     if (password.length() < 6) {
         QMessageBox::information(this, "提示", "密码长度应至少六位，请重新输入。");
+        return;
+    }else if(password.length()>16){
+        QMessageBox::information(this, "提示", "密码长度最多为16位，请重新输入。");
         return;
     }
     QString res = QString("login****%1****%2").arg(user_name).arg(password);
@@ -76,12 +85,18 @@ void Widget::try_login() {  //将登录信息以 login****用户名****密码 �
 void Widget::try_register() {   //将注册信息以 register****用户名****密码 的方式发送给服务端验证
     user_name = ui->edit_username->text();
     if (user_name.length() < 6) {
-        QMessageBox::information(this, "提示", "用户名长度应至少六位，请重新输入。");
+        QMessageBox::information(this, "提示", "用户名长度应至少6位，请重新输入。");
+        return;
+    }else if(user_name.length() > 16){
+        QMessageBox::information(this, "提示", "用户名长度最多为16位，请重新输入。");
         return;
     }
     QString password = ui->edit_password->text();
     if (password.length() < 6) {
         QMessageBox::information(this, "提示", "密码长度应至少六位，请重新输入。");
+        return;
+    }else if(password.length()>16){
+        QMessageBox::information(this, "提示", "密码长度最多为16位，请重新输入。");
         return;
     }
     QString res = QString("register****%1****%2").arg(user_name).arg(password);
@@ -155,7 +170,7 @@ void Widget::read_from_socket() {
             if(list.at(1).size()==0) {
                 ui->files->setRowCount(1);
                 ui->files->setItem(0,0,new QTableWidgetItem("无文件"));
-                return;
+                continue;
             }
             auto files=list.at(1).split("##");  //各文件以##隔开
             ui->files->setRowCount(files.size());
@@ -257,8 +272,9 @@ void Widget::read_from_socket() {
                 }
             }
         }
-        check_byte(as); //检测字节流中是否存在下载的文件字节
+
     }
+    check_byte(as); //检测字节流中是否存在下载的文件字节
 }
 void Widget::seek_next_up_cur() {   //寻找传输状态的下一个文件下标
     for(int i=status_up_cur+1; i<status.size(); i++) {
@@ -373,6 +389,9 @@ void Widget::on_pushButton_5_clicked() {
 
 void Widget::on_Button_logout_clicked() {
     ui->stackedWidget->setCurrentIndex(0);
+    ui->transport->setRowCount(0);
+    status.clear();
+    status_up_cur=status_down_cur=-1;
     QString res="logout****";
     send_to_socket(res);
 }
@@ -652,4 +671,44 @@ void Widget::set_hidden(int index)
         ui->PassReq->hide();
         ui->RejReq->hide();
     }
+}
+
+void Widget::on_rename_clicked()
+{
+    int choice=ui->files->currentRow();
+    if(choice==-1) {
+        QMessageBox::information(this,"提示","请选择要重命名的文件。");
+        return;
+    }
+    QString file_name=ui->files->item(choice,0)->text();
+    bool ok;
+    QString changed_name = QInputDialog::getText(this,"输入文件名",tr("请输入修改后的文件名：")
+                                              , QLineEdit::Normal,file_name, &ok);
+    if (ok && !changed_name.isEmpty()) {
+        int num=0;
+        for(int i=0;i<ui->files->rowCount();i++){
+            if(ui->files->item(i,0)->text()==changed_name)num++;
+        }
+        if(num!=0){
+            QMessageBox::information(this,"提示",QString("文件名不可重复！"));
+            return;
+        }
+        QString res=QString("rename****%1##%2").arg(file_name).arg(changed_name);   //发送分享请求
+        send_to_socket(res);
+    }else if(ok && changed_name.isEmpty()){
+        QMessageBox::information(this,"提示",QString("文件名不可为空！"));
+        return;
+    }
+}
+
+void Widget::on_delete_file_clicked()
+{
+    int choice=ui->files->currentRow();
+    if(choice==-1) {
+        QMessageBox::information(this,"提示","请选择要删除的文件。");
+        return;
+    }
+    QString file_name=ui->files->item(choice,0)->text();
+    QString res=QString("delete****%1").arg(file_name);   //发送分享请求
+    send_to_socket(res);
 }

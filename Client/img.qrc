@@ -6,5 +6,6 @@
         <file>img/CustomerCopy.jpg</file>
         <file>img/CustomerService.jpg</file>
         <file>img/back.png</file>
+        <file>img/cloud.png</file>
     </qresource>
 </RCC>
